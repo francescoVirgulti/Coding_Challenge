@@ -2,14 +2,16 @@
 #include <fstream>
 #include <vector>
 
-//prova commento
 using namespace std;
-struct{ // Prova
-    int x,
-    int y, 
-    bool occ,
-}cella_T;
 
+struct Cell {
+    int x;
+    int y;
+    bool occ;
+    bool isWH; // true if the cell is a wormhole
+};
+
+typedef Cell* CellPtr;
 
 int main() {
     int C, R, S;
@@ -29,16 +31,19 @@ int main() {
         input >> snakeLengths[i];
     }
 
-    vector<vector<int>> grid(R, vector<int>(C));
+    vector<vector<Cell>> grid(R, vector<Cell>(C));
 
     for (int i = 0; i < R; ++i) {
         for (int j = 0; j < C; ++j) {
             char cell;
             input >> cell;
             if (cell == '*') {
-                grid[i][j] = -1; // Segna la presenza di un wormhole con -1
+                grid[i][j].isWH = true; // Segna la presenza di un wormhole
             } else {
-                grid[i][j] = cell - '0'; // Converte il carattere in intero
+                grid[i][j].x = i; // Coordinata x della cella
+                grid[i][j].y = j; // Coordinata y della cella
+                grid[i][j].occ = false; // Inizialmente la cella non è occupata
+                grid[i][j].isWH = false; // Inizialmente la cella non è un wormhole
             }
         }
     }
@@ -47,7 +52,7 @@ int main() {
     cout << "Matrice inizializzata:" << endl;
     for (int i = 0; i < R; ++i) {
         for (int j = 0; j < C; ++j) {
-            cout << grid[i][j] << " ";
+            cout << "(" << grid[i][j].x << "," << grid[i][j].y << "," << grid[i][j].occ << "," << grid[i][j].isWH << ") ";
         }
         cout << endl;
     }
