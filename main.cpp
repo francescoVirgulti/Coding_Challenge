@@ -13,6 +13,9 @@ struct Cell {
 
 typedef Cell* CellPtr;
 
+// Definizione del tipo per la matrice
+typedef vector<vector<Cell>> Matrix;
+
 int main() {
     int C, R, S;
     vector<int> snakeLengths;
@@ -31,7 +34,7 @@ int main() {
         input >> snakeLengths[i];
     }
 
-    vector<vector<Cell>> grid(R, vector<Cell>(C));
+    Matrix grid(R, vector<Cell>(C));
 
     for (int i = 0; i < R; ++i) {
         for (int j = 0; j < C; ++j) {
