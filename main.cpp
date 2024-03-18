@@ -3,6 +3,12 @@
 #include <vector>
 
 using namespace std;
+struct{
+    int x,
+    int y, 
+    bool occ,
+}cella_T;
+
 
 int main() {
     int C, R, S;
