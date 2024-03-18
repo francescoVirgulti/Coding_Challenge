@@ -4,7 +4,7 @@
 
 //prova commento
 using namespace std;
-struct{
+struct{ // Prova
     int x,
     int y, 
     bool occ,
