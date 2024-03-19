@@ -3,72 +3,70 @@
 #include <iostream>
 using namespace std;
 
-struct Node {
+struct Node_S {
   int data;
-  int x;
-  int y;
-  Node *parent;
-  Node *left;
-  Node *right;
+  Node_S *parent;
+  Node_S *left;
+  Node_S *right;
   int color;
 };
 
-typedef Node *NodePtr;
+typedef Node_S *Node_S_Ptr;
 
-class RedBlackTree {
+class SerpenteRedBlackTree {
    private:
-  NodePtr root;
-  NodePtr TNULL;
+  Node_S_Ptr root;
+  Node_S_Ptr TNULL;
 
-  void initializeNULLNode(NodePtr node, NodePtr parent) {
-    node->data = 0;
-    node->parent = parent;
-    node->left = nullptr;
-    node->right = nullptr;
-    node->color = 0;
+  void initializeNULLNode_S(Node_S_Ptr node_S, Node_S_Ptr parent) {
+    node_S->data = 0;
+    node_S->parent = parent;
+    node_S->left = nullptr;
+    node_S->right = nullptr;
+    node_S->color = 0;
   }
 
   // Preorder
-  void preOrderHelper(NodePtr node) {
-    if (node != TNULL) {
-      cout << node->data << " ";
-      preOrderHelper(node->left);
-      preOrderHelper(node->right);
+  void preOrderHelper(Node_S_Ptr node_S) {
+    if (node_S != TNULL) {
+      cout << node_S->data << " ";
+      preOrderHelper(node_S->left);
+      preOrderHelper(node_S->right);
     }
   }
 
   // Inorder
-  void inOrderHelper(NodePtr node) {
-    if (node != TNULL) {
-      inOrderHelper(node->left);
-      cout << node->data << " ";
-      inOrderHelper(node->right);
+  void inOrderHelper(Node_S_Ptr node_S) {
+    if (node_S != TNULL) {
+      inOrderHelper(node_S->left);
+      cout << node_S->data << " ";
+      inOrderHelper(node_S->right);
     }
   }
 
   // Post order
-  void postOrderHelper(NodePtr node) {
-    if (node != TNULL) {
-      postOrderHelper(node->left);
-      postOrderHelper(node->right);
-      cout << node->data << " ";
+  void postOrderHelper(Node_S_Ptr node_S) {
+    if (node_S != TNULL) {
+      postOrderHelper(node_S->left);
+      postOrderHelper(node_S->right);
+      cout << node_S->data << " ";
     }
   }
 
-  NodePtr searchTreeHelper(NodePtr node, int key) {
-    if (node == TNULL || key == node->data) {
-      return node;
+  Node_S_Ptr searchTreeHelper(Node_S_Ptr node_S, int key) {
+    if (node_S == TNULL || key == node_S->data) {
+      return node_S;
     }
 
-    if (key < node->data) {
-      return searchTreeHelper(node->left, key);
+    if (key < node_S->data) {
+      return searchTreeHelper(node_S->left, key);
     }
-    return searchTreeHelper(node->right, key);
+    return searchTreeHelper(node_S->right, key);
   }
 
   // For balancing the tree after deletion
-  void deleteFix(NodePtr x) {
-    NodePtr s;
+  void deleteFix(Node_S_Ptr x) {
+    Node_S_Ptr s;
     while (x != root && x->color == 0) {
       if (x == x->parent->left) {
         s = x->parent->right;
@@ -127,7 +125,7 @@ class RedBlackTree {
     x->color = 0;
   }
 
-  void rbTransplant(NodePtr u, NodePtr v) {
+  void rbTransplant(Node_S_Ptr u, Node_S_Ptr v) {
     if (u->parent == nullptr) {
       root = v;
     } else if (u == u->parent->left) {
@@ -138,18 +136,18 @@ class RedBlackTree {
     v->parent = u->parent;
   }
 
-  void deleteNodeHelper(NodePtr node, int key) {
-    NodePtr z = TNULL;
-    NodePtr x, y;
-    while (node != TNULL) {
-      if (node->data == key) {
-        z = node;
+  void deleteNode_SHelper(Node_S_Ptr node_S, int key) {
+    Node_S_Ptr z = TNULL;
+    Node_S_Ptr x, y;
+    while (node_S != TNULL) {
+      if (node_S->data == key) {
+        z = node_S;
       }
 
-      if (node->data <= key) {
-        node = node->right;
+      if (node_S->data <= key) {
+        node_S = node_S->right;
       } else {
-        node = node->left;
+        node_S = node_S->left;
       }
     }
 
@@ -190,8 +188,8 @@ class RedBlackTree {
   }
 
   // For balancing the tree after insertion
-  void insertFix(NodePtr k) {
-    NodePtr u;
+  void insertFix(Node_S_Ptr k) {
+    Node_S_Ptr u;
     while (k->parent->color == 1) {
       if (k->parent == k->parent->parent->right) {
         u = k->parent->parent->left;
@@ -234,7 +232,7 @@ class RedBlackTree {
     root->color = 0;
   }
 
-  void printHelper(NodePtr root, string indent, bool last) {
+  void printHelper(Node_S_Ptr root, string indent, bool last) {
     if (root != TNULL) {
       cout << indent;
       if (last) {
@@ -253,8 +251,8 @@ class RedBlackTree {
   }
 
    public:
-  RedBlackTree() {
-    TNULL = new Node;
+  SerpenteRedBlackTree() {
+    TNULL = new Node_S;
     TNULL->color = 0;
     TNULL->left = nullptr;
     TNULL->right = nullptr;
@@ -273,30 +271,30 @@ class RedBlackTree {
     postOrderHelper(this->root);
   }
 
-  NodePtr searchTree(int k) {
+  Node_S_Ptr searchTree(int k) {
     return searchTreeHelper(this->root, k);
   }
 
-  NodePtr minimum(NodePtr node) {
-    while (node->left != TNULL) {
-      node = node->left;
+  Node_S_Ptr minimum(Node_S_Ptr node_S) {
+    while (node_S->left != TNULL) {
+      node_S = node_S->left;
     }
-    return node;
+    return node_S;
   }
 
-  NodePtr maximum(NodePtr node) {
-    while (node->right != TNULL) {
-      node = node->right;
+  Node_S_Ptr maximum(Node_S_Ptr node_S) {
+    while (node_S->right != TNULL) {
+      node_S = node_S->right;
     }
-    return node;
+    return node_S;
   }
 
-  NodePtr successor(NodePtr x) {
+  Node_S_Ptr successor(Node_S_Ptr x) {
     if (x->right != TNULL) {
       return minimum(x->right);
     }
 
-    NodePtr y = x->parent;
+    Node_S_Ptr y = x->parent;
     while (y != TNULL && x == y->right) {
       x = y;
       y = y->parent;
@@ -304,12 +302,12 @@ class RedBlackTree {
     return y;
   }
 
-  NodePtr predecessor(NodePtr x) {
+  Node_S_Ptr predecessor(Node_S_Ptr x) {
     if (x->left != TNULL) {
       return maximum(x->left);
     }
 
-    NodePtr y = x->parent;
+    Node_S_Ptr y = x->parent;
     while (y != TNULL && x == y->left) {
       x = y;
       y = y->parent;
@@ -318,8 +316,8 @@ class RedBlackTree {
     return y;
   }
 
-  void leftRotate(NodePtr x) {
-    NodePtr y = x->right;
+  void leftRotate(Node_S_Ptr x) {
+    Node_S_Ptr y = x->right;
     x->right = y->left;
     if (y->left != TNULL) {
       y->left->parent = x;
@@ -336,8 +334,8 @@ class RedBlackTree {
     x->parent = y;
   }
 
-  void rightRotate(NodePtr x) {
-    NodePtr y = x->left;
+  void rightRotate(Node_S_Ptr x) {
+    Node_S_Ptr y = x->left;
     x->left = y->right;
     if (y->right != TNULL) {
       y->right->parent = x;
@@ -354,56 +352,54 @@ class RedBlackTree {
     x->parent = y;
   }
 
-  // Inserting a node
-  void insert(int key, int mat_x, int mat_y) {
-    NodePtr node = new Node;
-    node->parent = nullptr;
-    node->data = key;
-    node->x = mat_x;
-    node->y = mat_y;
-    node->left = TNULL;
-    node->right = TNULL;
-    node->color = 1;
+  // Inserting a node_S
+  void insert(int key) {
+    Node_S_Ptr node_S = new Node_S;
+    node_S->parent = nullptr;
+    node_S->data = key;
+    node_S->left = TNULL;
+    node_S->right = TNULL;
+    node_S->color = 1;
 
-    NodePtr y = nullptr;
-    NodePtr x = this->root;
+    Node_S_Ptr y = nullptr;
+    Node_S_Ptr x = this->root;
 
     while (x != TNULL) {
       y = x;
-      if (node->data < x->data) {
+      if (node_S->data < x->data) {
         x = x->left;
       } else {
         x = x->right;
       }
     }
 
-    node->parent = y;
+    node_S->parent = y;
     if (y == nullptr) {
-      root = node;
-    } else if (node->data < y->data) {
-      y->left = node;
+      root = node_S;
+    } else if (node_S->data < y->data) {
+      y->left = node_S;
     } else {
-      y->right = node;
+      y->right = node_S;
     }
 
-    if (node->parent == nullptr) {
-      node->color = 0;
+    if (node_S->parent == nullptr) {
+      node_S->color = 0;
       return;
     }
 
-    if (node->parent->parent == nullptr) {
+    if (node_S->parent->parent == nullptr) {
       return;
     }
 
-    insertFix(node);
+    insertFix(node_S);
   }
 
-  NodePtr getRoot() {
+  Node_S_Ptr getRoot() {
     return this->root;
   }
 
-  void deleteNode(int data) {
-    deleteNodeHelper(this->root, data);
+  void deleteNode_S(int data) {
+    deleteNode_SHelper(this->root, data);
   }
 
   void printTree() {
