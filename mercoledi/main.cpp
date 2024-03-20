@@ -28,7 +28,7 @@ int main() {
     for (int i = 0; i < S; ++i) {
         int key;
         input >> key; 
-        serpente_albero.insert(key);
+        serpente_albero.insert(key, i);
     }
 
    std::vector<std::vector<Cell*>> matrix(R, std::vector<Cell*>(C));
@@ -108,18 +108,26 @@ int main() {
 
     for(int i=0; i<S; i++){
         int snakeLenght  = serpente_albero.maximum(serpente_albero.getRoot())->data;
+        int nSerpente =serpente_albero.maximum(serpente_albero.getRoot())->nSerpente;
         serpente_albero.deleteNode_S(snakeLenght);
 
-        std::queue<NodePtr> n_massimi;
+        std::vector<NodePtr> n_massimi;
 
         NodePtr  max = albero.maximum(albero.getRoot()) ;
         albero.deleteNode(max->data);
 
-        n_massimi.push(albero.maximum(albero.getRoot()));
+        n_massimi.push_back(albero.maximum(albero.getRoot()));
 
         for (int j = 0; j < N; j++)
         {
-            n_massimi.push(albero.successor(max));
+            bool flag=false;
+            for(int k=0; k< n_massimi.size()&&flag==false; k++){
+                if(abs(n_massimi.at(k)->x - albero.successor(max)->x) + abs(n_massimi.at(k)->y - albero.successor(max)->y) + 1
+                    <snakeLenght)
+                    flag=true;
+            }
+            if(flag==false)
+                n_massimi.push_back(albero.successor(max));
         }
         
         CellClass c(matrix[n_massimi.front() -> x][(n_massimi.front()) -> y]);
@@ -130,6 +138,8 @@ int main() {
         }
 
     }
+
+    
 
     
     input.close();
