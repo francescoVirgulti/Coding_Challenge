@@ -4,7 +4,6 @@
 #include <string>
 #include <map>
 #include <unordered_map>
-#include <cstdio>
 
 struct GoldenPoint
 {
@@ -61,12 +60,9 @@ int main()
 {
 
 
-    std::ifstream file("./input/00-trailer.txt");
-    if (!file)
-    {
-        std::cerr << "Impossibile aprire il file di input!" << std::endl;
-        return 1;
-    }
+    std::ifstream file("./input/trailer.txt");
+
+  
 
     int W, H, GN, SM, TL;
     file >> W >> H >> GN >> SM >> TL;
@@ -106,6 +102,8 @@ int main()
     }
     return 0;
 }
+
+
 
 void readGoldenPoints(std::ifstream &file, std::vector<GoldenPoint> &goldenPoints)
 {
