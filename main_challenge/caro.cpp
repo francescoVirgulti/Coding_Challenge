@@ -94,20 +94,34 @@ int main()
         printf("Cost: %d\n", tile.second.cost);
         printf("Number Available: %d\n\n", tile.second.numAvailable);
     }
+    const std::string filename = "output.txt";
 
-
-//aggiungere il file su cui stampare
-    for(int i=0; i<W; i++){
-        for(int j=0; j<H; j++){
-            if(matrix[i][j].tile.has_value()){
-                outfile<<matrix[i][j].tile.id<<i<<j<<"/n";
-            }
-        }
-    }
-
+    writeRowToFile(filename, matrix, W, H);
     return 0;
 }
 
+void writeRowToFile(const std::string &filename, std::vector<std::vector<Cell>> &matrix, int W, int H)
+{
+    std::ofstream file(filename, std::ios::app);
+    if (file.is_open())
+    {
+        for (int i = 0; i < W; i++)
+        {
+            for (int j = 0; j < H; j++)
+            {
+                if (matrix[i][j].tile.has_value())
+                {
+                    file << '\t' << matrix[i][j].tile.value().id << '\t' << i << '\t' << j << "\n";
+                }
+            }
+        }
+        file.close();
+    }
+    else
+    {
+        std::cerr << "Unable to open file." << std::endl;
+    }
+}
 void readGoldenPoints(std::ifstream &file, std::vector<GoldenPoint> &goldenPoints, std::vector<std::vector<Cell>> &matrix)
 {
     for (auto &point : goldenPoints)
@@ -167,9 +181,4 @@ std::optional<SilverPoint> searchSilverPoint(std::vector<std::vector<Cell>> &mat
             }
         }
     }
-}
-
-
-void stampa(std::vector<std::vector<Cell>> &matrix, int H, int W){
-
 }
