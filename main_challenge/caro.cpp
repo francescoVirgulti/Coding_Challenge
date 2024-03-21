@@ -66,7 +66,7 @@ void readTiles(std::ifstream &file, std::unordered_map<std::string, Tile> &tiles
 
 int main()
 {
-    std::ifstream file("./input/00-trailer.txt");
+    std::ifstream file("./input/trailer.txt");
     if (!file)
     {
         std::cerr << "Impossibile aprire il file di input!" << std::endl;
@@ -146,9 +146,9 @@ void useTile(const std::string &id)
 std::optional<SilverPoint> searchSilverPoint(std::vector<std::vector<Cell>> &matrix, int H, int W, GoldenPoint &G1, GoldenPoint &G2)
 {
     int i, j;
-    for (i = G1.x; i < G2.x; i++)
+    for (i = G1.x; i <= G2.x; i++)
     {
-        for (j = G1.y; j < G2.y; j++)
+        for (j = G1.y; j <= G2.y; j++)
         {
             if (matrix[i][j].silverPoint.has_value())
             {
