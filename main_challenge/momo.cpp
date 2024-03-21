@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 #include <unordered_map>
-#include <cstdio> 
+#include <cstdio>
 
 struct GoldenPoint
 {
@@ -57,9 +57,10 @@ void readGoldenPoints(std::ifstream &file, std::vector<GoldenPoint> &goldenPoint
 void readSilverPoints(std::ifstream &file, std::vector<SilverPoint> &silverPoints);
 void readTiles(std::ifstream &file, std::unordered_map<std::string, Tile> &tiles);
 
-
 int main()
 {
+
+
     std::ifstream file("./input/00-trailer.txt");
     if (!file)
     {
@@ -69,6 +70,22 @@ int main()
 
     int W, H, GN, SM, TL;
     file >> W >> H >> GN >> SM >> TL;
+
+    if (!file)
+    {
+        std::cerr << "Errore durante la lettura della prima riga del file!" << std::endl;
+        // Stampa lo stato di errore per aiutarti a capire cosa è andato storto
+        std::cerr << "failbit: " << file.fail() << std::endl;
+        std::cerr << "badbit: " << file.bad() << std::endl;
+        std::cerr << "eofbit: " << file.eof() << std::endl;
+        return 1;
+    }
+    else
+    {
+        // Se la lettura è stata un successo, stampa i valori per verificarli
+        std::cout << "Lettura della prima riga riuscita:" << std::endl;
+        std::cout << "W: " << W << ", H: " << H << ", GN: " << GN << ", SM: " << SM << ", TL: " << TL << std::endl;
+    }
 
     std::vector<GoldenPoint> goldenPoints(GN);
     readGoldenPoints(file, goldenPoints);
