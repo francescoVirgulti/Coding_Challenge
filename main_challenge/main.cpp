@@ -29,6 +29,11 @@ struct Cell
     std::optional<SilverPoint> silverPoint;
     std::optional<Tile> tile;
 };
+
+
+
+
+
 enum Direction
 {
     LEFT_TO_RIGHT,
