@@ -1,4 +1,6 @@
 #include <iostream>
+#include <optional>
+#include <vector>
 
 enum Direction
 {
@@ -21,6 +23,22 @@ enum Direction
     NO_ACTION
 };
 
+struct GoldenPoint
+{
+    int x, y;
+};
+
+struct SilverPoint
+{
+    int x, y, score;
+};
+
+struct Tile
+{
+    std::string id;
+    int cost, numAvailable;
+};
+
 struct Cell
 {
     std::optional<GoldenPoint> goldPoint;
@@ -28,37 +46,58 @@ struct Cell
     std::optional<Tile> tile;
 };
 
-Direction funzione(int x1, int y1, int x2, int y2) {
-    if (x1 > x2) {
-        if (y1 > y2) {
+Direction giveDirection(int x1, int y1, int x2, int y2)
+{
+    if (x1 > x2)
+    {
+        if (y1 > y2)
+        {
             return RIGHT_TO_DOWN;
-        } else if (y1 == y2) {
+        }
+        else if (y1 == y2)
+        {
             return RIGHT_TO_LEFT;
-        } else {
+        }
+        else
+        {
             return RIGHT_TO_UP;
         }
-    } else if (x1 == x2) {
-        if (y1 > y2) {
+    }
+    else if (x1 == x2)
+    {
+        if (y1 > y2)
+        {
             return UP_TO_DOWN;
-        } else if (y1 == y2) {
+        }
+        else if (y1 == y2)
+        {
             return NO_ACTION;
-        } else {
+        }
+        else
+        {
             return DOWN_TO_UP;
         }
-    } else {
-        if (y1 > y2) {
-            return LEFT_TO_DOWN
-        } else if (y1 == y2) {
+    }
+    else
+    {
+        if (y1 > y2)
+        {
+            return LEFT_TO_DOWN;
+        }
+        else if (y1 == y2)
+        {
             return LEFT_TO_RIGHT;
-        } else {
+        }
+        else
+        {
             return LEFT_TO_UP;
         }
     }
 }
 
-int* searchFirstPoint(std::vector<std::vector<Cell>> &matrix, int H, int W)
+int *searchFirstPoint(std::vector<std::vector<Cell>> &matrix, int H, int W)
 {
-    int* pos = new int[2];
+    int *pos = new int[2];
 
     int i, j;
     for (i = 0; i <= W; i++)
@@ -74,4 +113,3 @@ int* searchFirstPoint(std::vector<std::vector<Cell>> &matrix, int H, int W)
         }
     }
 }
-
