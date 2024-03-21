@@ -413,6 +413,103 @@ class RedBlackTree {
 
 
 
+enum Direction
+{
+    LEFT_TO_RIGHT,
+    LEFT_TO_DOWN,
+    LEFT_TO_UP,
+
+    UP_TO_RIGHT,
+    UP_TO_LEFT,
+    UP_TO_DOWN,
+
+    RIGHT_TO_UP,
+    RIGHT_TO_LEFT,
+    RIGHT_TO_DOWN,
+
+    DOWN_TO_RIGHT,
+    DOWN_TO_UP,
+    DOWN_TO_LEFT,
+
+    NO_ACTION
+};
+
+const std::map<std::string, std::vector<Direction>> tileDirections = {
+    {"3", {LEFT_TO_RIGHT}},
+    {"5", {DOWN_TO_RIGHT}},
+    {"6", {LEFT_TO_DOWN}},
+    {"7", {LEFT_TO_RIGHT, LEFT_TO_DOWN, DOWN_TO_RIGHT}},
+    {"9", {UP_TO_RIGHT}},
+    {"96", {LEFT_TO_DOWN, UP_TO_RIGHT}},
+    {"A", {LEFT_TO_UP}},
+    {"A5", {LEFT_TO_UP, DOWN_TO_RIGHT}},
+    {"B", {LEFT_TO_RIGHT, LEFT_TO_UP, UP_TO_RIGHT}},
+    {"C", {UP_TO_DOWN}},
+    {"C3", {LEFT_TO_RIGHT, UP_TO_DOWN}},
+    {"D", {UP_TO_DOWN, UP_TO_RIGHT, DOWN_TO_RIGHT}},
+    {"E", {LEFT_TO_UP, LEFT_TO_DOWN, UP_TO_DOWN}},
+    {"F", {LEFT_TO_RIGHT, LEFT_TO_DOWN, LEFT_TO_UP, UP_TO_DOWN, DOWN_TO_RIGHT, UP_TO_RIGHT}},
+};
+
+function del_node(std::string id, int costo){
+  if(LEFT_TO_RIGHT or RIGHT_TO_LEFT){
+    L_R.deleteNode(costo,id);
+  }
+  
+}
+
+RedBlackTree L_R,U_D,L_U,L_D,R_U,R_D;
+NodePtr choose(Direction dir) {
+    NodePtr minimo = nullptr;
+    switch (dir) {
+        case LEFT_TO_RIGHT:
+        case RIGHT_TO_LEFT:
+            minimo = L_R.minimum(L_R.getRoot());
+            break;
+        case UP_TO_DOWN:
+        case DOWN_TO_UP:
+            minimo = U_D.minimum(U_D.getRoot());
+            break;
+        case LEFT_TO_DOWN:
+        case DOWN_TO_LEFT:
+            minimo = L_D.minimum(L_D.getRoot());
+            if(minimo == nullptr){ 
+              minimo = L_R.minimum(L_R.getRoot());
+              if(minimo == nullptr){U_D.minimum(U_D.getRoot());
+
+              }
+            }
+            break;
+        case LEFT_TO_UP:
+        case UP_TO_LEFT:
+            minimo = L_U.minimum(L_U.getRoot());
+            if(minimo==nullptr){
+              minimo = L_R.minimum(L_R.getRoot());
+              if(minimo == nullptr){U_D.minimum(U_D.getRoot()); 
+            }
+            break;
+        case UP_TO_RIGHT:
+        case RIGHT_TO_UP:
+            minimo = R_U.minimum(R_U.getRoot());
+            break;
+        case RIGHT_TO_DOWN:
+        case DOWN_TO_RIGHT:
+            minimo = R_D.minimum(R_D.getRoot());
+            break;
+        default:
+            break;
+    }
+
+
+
+    
+    return minimo;
+}
+
+
+
+
+
 
 
 
