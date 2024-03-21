@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <unordered_map>
+#include <cstdio> 
 
 struct GoldenPoint
 {
@@ -56,9 +57,10 @@ void readGoldenPoints(std::ifstream &file, std::vector<GoldenPoint> &goldenPoint
 void readSilverPoints(std::ifstream &file, std::vector<SilverPoint> &silverPoints);
 void readTiles(std::ifstream &file, std::unordered_map<std::string, Tile> &tiles);
 
+
 int main()
 {
-    std::ifstream file("input/00-trailer.txt");
+    std::ifstream file("./input/00-trailer.txt");
     if (!file)
     {
         std::cerr << "Impossibile aprire il file di input!" << std::endl;
@@ -67,6 +69,7 @@ int main()
 
     int W, H, GN, SM, TL;
     file >> W >> H >> GN >> SM >> TL;
+
     std::vector<GoldenPoint> goldenPoints(GN);
     readGoldenPoints(file, goldenPoints);
 
@@ -77,12 +80,12 @@ int main()
 
     file.close(); // Chiudi il file dopo aver finito di leggere i dati
 
-    // Print tileInventory
+    // Usa printf per stampare l'inventario dei tile
     for (const auto &tile : tileInventory)
     {
-        std::cout << "Tile ID: " << tile.second.id ;
-        std::cout << "Cost: " << tile.second.cost ;
-        std::cout << "Number Available: " << tile.second.numAvailable ;
+        printf("Tile ID: %s\n", tile.second.id.c_str());
+        printf("Cost: %d\n", tile.second.cost);
+        printf("Number Available: %d\n\n", tile.second.numAvailable);
     }
     return 0;
 }
