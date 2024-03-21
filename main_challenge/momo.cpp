@@ -134,6 +134,7 @@ void readTiles(std::ifstream &file, std::unordered_map<std::string, Tile> &tileI
     {
         file >> id >> cost >> numAvailable;
         tileInventory[id] = {id, cost, numAvailable};
+        
     }
 }
 
