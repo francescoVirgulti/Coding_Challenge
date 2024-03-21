@@ -30,77 +30,8 @@ struct Cell
     std::optional<Tile> tile;
 };
 
-enum Direction
-{
-    LEFT_TO_RIGHT,
-    DOWN_TO_RIGHT,
-    LEFT_TO_DOWN,
-    UP_TO_RIGHT,
-    LEFT_TO_UP,
-    UP_TO_DOWN
-};
-
-std::unordered_map<std::string, Tile> tileInventory;
-
-// Completamento della mappa con i nuovi Tiles
-const std::map<std::string, std::vector<Direction>> tileDirections = {
-    {"3", {LEFT_TO_RIGHT}},
-    {"5", {DOWN_TO_RIGHT}},
-    {"6", {LEFT_TO_DOWN}},
-    {"7", {LEFT_TO_RIGHT, LEFT_TO_DOWN, DOWN_TO_RIGHT}},
-    {"9", {UP_TO_RIGHT}},
-    {"96", {LEFT_TO_DOWN, UP_TO_RIGHT}},
-    {"A", {LEFT_TO_UP}},
-    {"A5", {LEFT_TO_UP, DOWN_TO_RIGHT}},
-    {"B", {LEFT_TO_RIGHT, LEFT_TO_UP, UP_TO_RIGHT}},
-    {"C", {UP_TO_DOWN}},
-    {"C3", {LEFT_TO_RIGHT, UP_TO_DOWN}},
-    {"D", {UP_TO_DOWN, UP_TO_RIGHT, DOWN_TO_RIGHT}},
-    {"E", {LEFT_TO_UP, LEFT_TO_DOWN, UP_TO_DOWN}},
-    {"F", {LEFT_TO_RIGHT, LEFT_TO_DOWN, LEFT_TO_UP, UP_TO_DOWN, DOWN_TO_RIGHT, UP_TO_RIGHT}},
-};
-
-// Dichiarazioni delle funzioni per la lettura
-void readGoldenPoints(std::ifstream &file, std::vector<GoldenPoint> &goldenPoints);
-void readSilverPoints(std::ifstream &file, std::vector<SilverPoint> &silverPoints);
-void readTiles(std::ifstream &file, std::unordered_map<std::string, Tile> &tiles);
-
-int *searchFirstPoint(std::vector<std::vector<Cell>> &matrix, int H, int W)
-{
-    int *pos = new int[2];
-
-    int i, j;
-    for (i = 0; i <= W; i++)
-    {
-        for (j = 0; j <= H; j++)
-        {
-            if (matrix[i][j].goldPoint.has_value())
-            {
-                pos[0] = i;
-                pos[1] = j;
-                return;
-            }
-        }
-    }
-}
-
-// fra
-
-struct Node
-{
-    int data;
-    std::string id;
-    Node *parent;
-    Node *left;
-    Node *right;
-    int color;
-};
-
-typedef Node *NodePtr;
-
 class RedBlackTree
 {
-
 
 private:
     NodePtr root;
@@ -611,6 +542,84 @@ public:
 };
 RedBlackTree L_R, U_D, L_U, L_D, R_U, R_D;
 
+enum Direction
+{
+    LEFT_TO_RIGHT,
+    LEFT_TO_DOWN,
+    LEFT_TO_UP,
+
+    UP_TO_RIGHT,
+    UP_TO_LEFT,
+    UP_TO_DOWN,
+
+    RIGHT_TO_UP,
+    RIGHT_TO_LEFT,
+    RIGHT_TO_DOWN,
+
+    DOWN_TO_RIGHT,
+    DOWN_TO_UP,
+    DOWN_TO_LEFT,
+
+    NO_ACTION
+};
+std::unordered_map<std::string, Tile> tileInventory;
+
+// Completamento della mappa con i nuovi Tiles
+const std::map<std::string, std::vector<Direction>> tileDirections = {
+    {"3", {LEFT_TO_RIGHT}},
+    {"5", {DOWN_TO_RIGHT}},
+    {"6", {LEFT_TO_DOWN}},
+    {"7", {LEFT_TO_RIGHT, LEFT_TO_DOWN, DOWN_TO_RIGHT}},
+    {"9", {UP_TO_RIGHT}},
+    {"96", {LEFT_TO_DOWN, UP_TO_RIGHT}},
+    {"A", {LEFT_TO_UP}},
+    {"A5", {LEFT_TO_UP, DOWN_TO_RIGHT}},
+    {"B", {LEFT_TO_RIGHT, LEFT_TO_UP, UP_TO_RIGHT}},
+    {"C", {UP_TO_DOWN}},
+    {"C3", {LEFT_TO_RIGHT, UP_TO_DOWN}},
+    {"D", {UP_TO_DOWN, UP_TO_RIGHT, DOWN_TO_RIGHT}},
+    {"E", {LEFT_TO_UP, LEFT_TO_DOWN, UP_TO_DOWN}},
+    {"F", {LEFT_TO_RIGHT, LEFT_TO_DOWN, LEFT_TO_UP, UP_TO_DOWN, DOWN_TO_RIGHT, UP_TO_RIGHT}},
+};
+
+// Dichiarazioni delle funzioni per la lettura
+void readGoldenPoints(std::ifstream &file, std::vector<GoldenPoint> &goldenPoints);
+void readSilverPoints(std::ifstream &file, std::vector<SilverPoint> &silverPoints);
+void readTiles(std::ifstream &file, std::unordered_map<std::string, Tile> &tiles);
+
+int *searchFirstPoint(std::vector<std::vector<Cell>> &matrix, int H, int W)
+{
+    int *pos = new int[2];
+
+    int i, j;
+    for (i = 0; i <= W; i++)
+    {
+        for (j = 0; j <= H; j++)
+        {
+            if (matrix[i][j].goldPoint.has_value())
+            {
+                pos[0] = i;
+                pos[1] = j;
+                return;
+            }
+        }
+    }
+}
+
+// fra
+
+struct Node
+{
+    int data;
+    std::string id;
+    Node *parent;
+    Node *left;
+    Node *right;
+    int color;
+};
+
+typedef Node *NodePtr;
+
 //
 int main()
 {
@@ -637,15 +646,34 @@ int main()
 
     // iniziamo a fare schifo
     searchFirstPoint(matrix, H, W);
+    const std::string filename = "output.txt";
 
-    // Usa printf per stampare l'inventario dei tile
-    for (const auto &tile : tileInventory)
-    {
-        printf("Tile ID: %s\n", tile.second.id.c_str());
-        printf("Cost: %d\n", tile.second.cost);
-        printf("Number Available: %d\n\n", tile.second.numAvailable);
-    }
+    writeRowToFile(filename, matrix, W, H);
+
     return 0;
+}
+
+void writeRowToFile(const std::string &filename, std::vector<std::vector<Cell>> &matrix, int W, int H)
+{
+    std::ofstream file(filename, std::ios::app);
+    if (file.is_open())
+    {
+        for (int i = 0; i < W; i++)
+        {
+            for (int j = 0; j < H; j++)
+            {
+                if (matrix[i][j].tile.has_value())
+                {
+                    file << '\t' << matrix[i][j].tile.value().id << '\t' << i << '\t' << j << "\n";
+                }
+            }
+        }
+        file.close();
+    }
+    else
+    {
+        std::cerr << "Unable to open file." << std::endl;
+    }
 }
 
 void readGoldenPoints(std::ifstream &file, std::vector<GoldenPoint> &goldenPoints, std::vector<std::vector<Cell>> &matrix)
