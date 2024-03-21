@@ -71,7 +71,24 @@ void readSilverPoints(std::ifstream &file, std::vector<SilverPoint> &silverPoint
 void readTiles(std::ifstream &file, std::unordered_map<std::string, Tile> &tiles);
 
 
+ int *searchFirstPoint(std::vector<std::vector<Cell>> &matrix, int H, int W)
+    {
+        int *pos = new int[2];
 
+        int i, j;
+        for (i = 0; i <= W; i++)
+        {
+            for (j = 0; j <= H; j++)
+            {
+                if (matrix[i][j].goldPoint.has_value())
+                {
+                    pos[0] = i;
+                    pos[1] = j;
+                    return;
+                }
+            }
+        }
+    }
 
 //fra
 
@@ -620,7 +637,13 @@ int main()
 
     readTiles(file, tileInventory);
 
+
     file.close(); // Chiudi il file dopo aver finito di leggere i dati
+
+
+    //iniziamo a fare schifo 
+    searchFirstPoint(matrix,H,W);
+    
 
     // Usa printf per stampare l'inventario dei tile
     for (const auto &tile : tileInventory)
