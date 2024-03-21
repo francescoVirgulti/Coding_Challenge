@@ -106,6 +106,7 @@ int *searchFirstPoint(std::vector<std::vector<Cell>> &matrix, int H, int W)
         {
             if (matrix[i][j].goldPoint.has_value())
             {
+                matrix[i][j].goldPoint.reset();
                 pos[0] = i;
                 pos[1] = j;
                 return;
