@@ -21,6 +21,13 @@ enum Direction
     NO_ACTION
 };
 
+struct Cell
+{
+    std::optional<GoldenPoint> goldPoint;
+    std::optional<SilverPoint> silverPoint;
+    std::optional<Tile> tile;
+};
+
 Direction funzione(int x1, int y1, int x2, int y2) {
     if (x1 > x2) {
         if (y1 > y2) {
@@ -48,3 +55,23 @@ Direction funzione(int x1, int y1, int x2, int y2) {
         }
     }
 }
+
+int* searchFirstPoint(std::vector<std::vector<Cell>> &matrix, int H, int W)
+{
+    int* pos = new int[2];
+
+    int i, j;
+    for (i = 0; i <= W; i++)
+    {
+        for (j = 0; j <= H; j++)
+        {
+            if (matrix[i][j].goldPoint.has_value())
+            {
+                pos[0] = i;
+                pos[1] = j;
+                return;
+            }
+        }
+    }
+}
+
