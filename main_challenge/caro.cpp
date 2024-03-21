@@ -94,6 +94,17 @@ int main()
         printf("Cost: %d\n", tile.second.cost);
         printf("Number Available: %d\n\n", tile.second.numAvailable);
     }
+
+
+//aggiungere il file su cui stampare
+    for(int i=0; i<W; i++){
+        for(int j=0; j<H; j++){
+            if(matrix[i][j].tile.has_value()){
+                outfile<<matrix[i][j].tile.id<<i<<j<<"/n";
+            }
+        }
+    }
+
     return 0;
 }
 
@@ -156,4 +167,9 @@ std::optional<SilverPoint> searchSilverPoint(std::vector<std::vector<Cell>> &mat
             }
         }
     }
+}
+
+
+void stampa(std::vector<std::vector<Cell>> &matrix, int H, int W){
+
 }
